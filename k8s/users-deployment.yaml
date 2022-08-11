@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users
+  labels:
+    app: users-api-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: users
+      labels:
+        app: users-api
+    spec:
+      containers:
+        - name: users-api
+          image: shykhovmyron/users-api-kub:latest
+        - name: auth-api
+          image: shykhovmyron/auth-api-kub:lastest
+  selector:
+    matchLabels:
+      app: users-api
