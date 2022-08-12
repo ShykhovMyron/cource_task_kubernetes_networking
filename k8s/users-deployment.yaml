@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users
+  name: users-deployment
   labels:
     app: users-api-deployment
 spec:
@@ -10,13 +10,16 @@ spec:
     metadata:
       name: users
       labels:
-        app: users-api
+        app: users
     spec:
       containers:
         - name: users-api
           image: shykhovmyron/users-api-kub:latest
+          env:
+            - name: AUTH_ADDRESS
+              value: localhost
         - name: auth-api
-          image: shykhovmyron/auth-api-kub:lastest
+          image: shykhovmyron/auth-api-kub:latest
   selector:
     matchLabels:
-      app: users-api
+      app: users
