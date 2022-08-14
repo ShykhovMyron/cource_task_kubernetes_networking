@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-deployment
-  labels:
-    app: users-api-deployment
 spec:
   replicas: 1
   template:
@@ -14,12 +12,25 @@ spec:
     spec:
       containers:
         - name: users-api
-          image: shykhovmyron/users-api-kub:latest
+          image: shykhovmyron/users-kub:latest
           env:
             - name: AUTH_ADDRESS
-              value: localhost
-        - name: auth-api
-          image: shykhovmyron/auth-api-kub:latest
+              value: $(AUTH_INSIDE_SERVICE_SERVICE_HOST)
   selector:
     matchLabels:
       app: users
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-outside-service
+spec:
+  selector:
+    app: users
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
