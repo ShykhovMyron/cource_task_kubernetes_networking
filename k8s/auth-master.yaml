@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: auth
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth-api
+          image: shykhovmyron/auth-kub:latest
+  selector:
+    matchLabels:
+      app: auth
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-inside-service
+spec:
+  selector:
+    app: auth
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
