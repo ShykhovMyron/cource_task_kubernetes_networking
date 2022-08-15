@@ -1,17 +1,26 @@
 version: "3"
 services:
+  frontend:
+    build: ./frontend
+    environment:
+      TASKS_ADDRESS: 'localhost:8000'
+    ports:
+      - "80:80"
+    depends_on:
+      - tasks
   auth:
-    build: ./auth-api
+    image: shykhovmyron/auth-kub:latest
   users:
-    build: ./users-api
+    image: shykhovmyron/users-kub:latest
     environment:
       AUTH_ADDRESS: 'auth'
     ports:
       - "8080:8080"
   tasks:
-    build: ./tasks-api
-    ports: 
+    image: shykhovmyron/tasks-kub:latest
+    ports:
       - "8000:8000"
     environment:
+      AUTH_ADDRESS: 'auth'
       TASKS_FOLDER: tasks
-    
+
